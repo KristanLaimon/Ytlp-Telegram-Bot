@@ -1,14 +1,9 @@
 ﻿using Telegram.Bot.Types.Enums;
-using YoutubeDLSharp.Options;
 using Telegram.Bot.Types;
-using YoutubeDLSharp;
 using Telegram.Bot;
-using System.Text;
 using DotNetEnv;
 using TeleBot_csharp.commands;
 using TeleBot_csharp.BotUtils;
-using YoutubeDLSharp.Metadata;
-using static System.Net.Mime.MediaTypeNames;
 
 Env.Load();
 
@@ -23,8 +18,6 @@ Console.WriteLine($"@{me.Username} is running... Press Enter to terminate");
 var commandHandler = new CommandHandler();
 commandHandler.Add(new StartComm());
 commandHandler.Add(new DownloadComm());
-
-var ytdlp = new YtDownloader();
 
 
 //Setup main methods for all this bot
@@ -49,7 +42,7 @@ async Task SlashCommand(Message message, UpdateType type)
     var commandName = fullArgs[0].Replace("@" + me.Username, "");
     string[] args = fullArgs.Length > 1 ? fullArgs.Where((value, index) => index > 0).ToArray() : Array.Empty<string>();
     #endregion
-    var success = await commandHandler.Run(bot, message, args, commandName);
+    new Thread(async () => await commandHandler.Run(bot, message, args, commandName)).Start();
 }
 async Task AnyMessage(Message msg, UpdateType type)
 {

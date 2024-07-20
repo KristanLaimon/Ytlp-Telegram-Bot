@@ -43,7 +43,6 @@ namespace TeleBot_csharp.BotUtils
             sb.AppendLine("📊 Seguidores: " + data.ChannelFollowerCount);
             sb.AppendLine("🧑‍💻 Uploader: " + data.Uploader);
             sb.AppendLine("⏱️ Duración: " + BotUtils.SecondsToTime((int)data.Duration));
-            sb.AppendLine("📅 Descripción: " + data.Description);
             return sb.ToString();
         }
 

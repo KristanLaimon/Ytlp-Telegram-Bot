@@ -23,7 +23,7 @@ namespace TeleBot_csharp.commands
             {
                 await teleBot.SendTextMessageAsync(
                     originalMsg.Chat, 
-                    "Proporciona el link de youtube... e.g /download https://www.youtube.com/watch?v=uZeMMHDp4bs"
+                    "Proporciona el link de youtube... e.g /download https://www.youtube.com/watch?v="
                 );
                 return;
             }
@@ -37,10 +37,10 @@ namespace TeleBot_csharp.commands
             string size = "0 MB";
             string finalStringMsg = "";
             int holdupDelay = 0;
-            var progressCallback = new Progress<DownloadProgress>(async p =>
+            var progressCallback = new Progress<DownloadProgress>(p =>
             {
                 holdupDelay++;
-                if (p.ETA == null && holdupDelay % 20 != 0) return;
+                if (p.ETA == null && holdupDelay % 80 != 0) return;
 
                 string text =
                     "\n\n🦊 Descargado " + p.Progress * 100 + "%" +
@@ -50,13 +50,7 @@ namespace TeleBot_csharp.commands
                 finalStringMsg = formattedMeta + text;
                 size = p.TotalDownloadSize;
 
-                try
-                {
-                    await teleBot.EditMessageTextAsync(originalMsg.Chat, msg.MessageId, finalStringMsg);
-                }
-                catch
-                {
-                }
+                teleBot.EditMessageTextAsync(originalMsg.Chat, msg.MessageId, finalStringMsg); ;
             });
 
             var downloadResult = await _ytdlp.DownloadVideo(args[0], metaData.Title, progressCallback);
@@ -66,6 +60,9 @@ namespace TeleBot_csharp.commands
                 await teleBot.EditMessageTextAsync(originalMsg.Chat, msg.MessageId, finalStringMsg + "\n\nListo. Subiendo Video...");
                 using (var stream = System.IO.File.OpenRead(downloadResult.Data))
                 {
+                    if (originalMsg.MediaGroupId != null)
+                        await teleBot.SendVideoAsync(originalMsg.MediaGroupId, stream, supportsStreaming: true);
+                    else
                     await teleBot.SendVideoAsync(originalMsg.Chat, stream, supportsStreaming: true);
                 }
                 System.IO.File.Delete(downloadResult.Data);
