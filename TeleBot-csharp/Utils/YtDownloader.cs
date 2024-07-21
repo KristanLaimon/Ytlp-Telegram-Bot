@@ -31,8 +31,6 @@ namespace TeleBot_csharp.BotUtils
             var vidData = await _ytdl.RunVideoDataFetch(ytUrl);
             if (!vidData.Success) return new VideoData();
             return vidData.Data;
-            
-      
         }
 
         public string FormatMetadata(VideoData data)

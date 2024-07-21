@@ -63,7 +63,7 @@ namespace TeleBot_csharp.commands
                     if (originalMsg.MediaGroupId != null)
                         await teleBot.SendVideoAsync(originalMsg.MediaGroupId, stream, supportsStreaming: true);
                     else
-                    await teleBot.SendVideoAsync(originalMsg.Chat, stream, supportsStreaming: true);
+                        await teleBot.SendVideoAsync(originalMsg.Chat, stream, supportsStreaming: true);
                 }
                 System.IO.File.Delete(downloadResult.Data);
             }
