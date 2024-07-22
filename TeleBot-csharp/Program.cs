@@ -18,11 +18,19 @@ Console.WriteLine($"@{me.Username} is running... Press Enter to terminate");
 var commandHandler = new CommandHandler();
 commandHandler.Add(new StartComm());
 commandHandler.Add(new DownloadComm());
+commandHandler.Add(new ButtonComm());
 
 
 //Setup main methods for all this bot
 bot.OnMessage += AnyMessage;
 bot.OnMessage += SlashCommand;
+bot.OnUpdate += help;
+
+Task help(Update update)
+{
+    //update.CallbackQuery.
+    throw new NotImplementedException();
+}
 
 //Set folder
 if (!Directory.Exists("downloads"))
