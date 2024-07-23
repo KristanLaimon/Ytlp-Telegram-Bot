@@ -5,14 +5,26 @@ using DotNetEnv;
 using TeleBot_csharp.commands;
 using TeleBot_csharp.BotUtils;
 
-Env.Load();
 
-//Setup Bot
-using var cts = new CancellationTokenSource();
-var bot = new TelegramBotClient(Env.GetString("token"), cancellationToken: cts.Token);
+#if DEBUG
+    var bot = GenerateBotFromEnv();
+#else
+    TelegramBotClient bot;
+    if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+        bot = GenerateBotFromEnv();
+    else
+    {
+        //Is Unix System
+        using var cts = new CancellationTokenSource();
+        bot = 
+            new TelegramBotClient(
+                Environment.GetEnvironmentVariable("BOT_API_TOKEN") ?? 
+                throw new Exception("You should provide a valid bot token to use this bot!"), cancellationToken: cts.Token
+            );
+    }
+#endif
 var me = await bot.GetMeAsync();
-Console.WriteLine($"@{me.Username} is running... Press Enter to terminate");
-
+Console.WriteLine($"Bot Token Read\nInitiating @{me.Username}...");
 
 //My dependencies - Handling Commands with Modules (Separated)
 var commandHandler = new CommandHandler();
@@ -20,25 +32,31 @@ commandHandler.Add(new StartComm());
 commandHandler.Add(new DownloadComm());
 commandHandler.Add(new ButtonComm());
 
-
-//Setup main methods for all this bot
 bot.OnMessage += AnyMessage;
 bot.OnMessage += SlashCommand;
-bot.OnUpdate += help;
 
-Task help(Update update)
-{
-    //update.CallbackQuery.
-    throw new NotImplementedException();
-}
-
-//Set folder
 if (!Directory.Exists("downloads"))
     Directory.CreateDirectory("downloads");
 
-Console.ReadLine();
-cts.Cancel();
+Console.WriteLine("Bot Ready to go!");
 
+//Keep running always until ctrl + c
+var tcs = new TaskCompletionSource<bool>();
+Console.CancelKeyPress += (sender, eventArgs) =>
+{
+    eventArgs.Cancel = true; 
+    tcs.SetResult(true);
+};
+await tcs.Task;
+
+#region Functions
+TelegramBotClient GenerateBotFromEnv()
+{
+    Env.Load(Path.Join(Environment.CurrentDirectory, ".dev.env"));
+    using var cts = new CancellationTokenSource();
+    var bot = new TelegramBotClient(Env.GetString("BOT_API_TOKEN"), cancellationToken: cts.Token);
+    return bot;
+}
 async Task SlashCommand(Message message, UpdateType type)
 {
     #region Verification
@@ -62,3 +80,4 @@ async Task AnyMessage(Message msg, UpdateType type)
     if (BotUtils.isYoutubeLink(msg.Text))
         new Thread(async () => await commandHandler.Run(bot, msg, [msg.Text], "download")).Start();
 }
+#endregion

@@ -15,16 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update=".env">
+    <None Update=".dev.env">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update=".example.env">
+    <None Update=".example.dev.env">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="cli\ffmpeg.exe">
+    <None Update="cli\windows\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="cli\yt-dlp.exe">
+    <None Update="cli\windows\yt-dlp.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

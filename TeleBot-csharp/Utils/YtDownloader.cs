@@ -16,8 +16,22 @@ namespace TeleBot_csharp.BotUtils
         public YtDownloader()
         {
             _ytdl.OutputFolder = ".\\downloads";
-            _ytdl.FFmpegPath = ".\\cli\\ffmpeg.exe";
-            _ytdl.YoutubeDLPath = ".\\cli\\yt-dlp.exe";
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                Console.WriteLine("Windows System Detected or dotnet client instance...");
+                Console.WriteLine("Using Pre-Built-in Binaries");
+                _ytdl.FFmpegPath = ".\\cli\\windows\\ffmpeg.exe";
+                _ytdl.YoutubeDLPath = ".\\cli\\windows\\yt-dlp.exe";
+            }
+            else
+            {
+                Console.WriteLine("Linux System Detected...");
+                Console.WriteLine("Downlading yt-dlp");
+                Utils.DownloadYtDlp().Wait();
+                Console.WriteLine("Downlading FFmpeg");
+                Utils.DownloadFFmpeg().Wait();
+                Console.WriteLine("All Installed!");
+            }
         }
 
         /// <summary>
