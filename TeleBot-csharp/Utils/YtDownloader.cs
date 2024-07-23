@@ -19,18 +19,15 @@ namespace TeleBot_csharp.BotUtils
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 Console.WriteLine("Windows System Detected or dotnet client instance...");
-                Console.WriteLine("Using Pre-Built-in Binaries");
+                Console.WriteLine("Using Windows Pre-Built-in Binaries");
                 _ytdl.FFmpegPath = ".\\cli\\windows\\ffmpeg.exe";
                 _ytdl.YoutubeDLPath = ".\\cli\\windows\\yt-dlp.exe";
             }
             else
             {
                 Console.WriteLine("Linux System Detected...");
-                Console.WriteLine("Downlading yt-dlp");
-                Utils.DownloadYtDlp().Wait();
-                Console.WriteLine("Downlading FFmpeg");
-                Utils.DownloadFFmpeg().Wait();
-                Console.WriteLine("All Installed!");
+                Console.WriteLine("Using Linux Pre-Built-in Binaries");
+                _ytdl.YoutubeDLPath = "./cli/unix/yt-dlp";
             }
         }
 

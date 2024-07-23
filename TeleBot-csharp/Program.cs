@@ -23,6 +23,7 @@ using TeleBot_csharp.BotUtils;
             );
     }
 #endif
+
 var me = await bot.GetMeAsync();
 Console.WriteLine($"Bot Token Read\nInitiating @{me.Username}...");
 
