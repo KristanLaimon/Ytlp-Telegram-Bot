@@ -11,10 +11,13 @@ namespace TeleBot_csharp.commands
 
         public async Task ExecuteCommand(TelegramBotClient bot, Message originalMsg, string[] args)
         {
-            var replyMarkup = new ReplyKeyboardMarkup(true)
-                .AddButton("--- Video ---")
+            var markup = new InlineKeyboardMarkup()
+                .AddButton("--- Formats ----")
                 .AddNewRow()
-                .AddButtons("Option1", "Option2");
+                .AddButton("240p", "240data");
+            markup.InlineKeyboard.First().ToArray().ElementAt(0).
+
+            await bot.SendTextMessage(originalMsg.Chat, "some Buttons", replyMarkup: markup);
 
                 //InlineKeyboardButton.WithCallbackData()
         }

@@ -15,7 +15,7 @@ namespace TeleBot_csharp.commands
 
         public async Task ExecuteCommand(TelegramBotClient bot, Message originalMsg, string[] args)
         {
-            await bot.SendTextMessageAsync(originalMsg.Chat, "Hola!");
+            await bot.SendTextMessage(originalMsg.Chat, "Hola!");
         }
     }
 }
