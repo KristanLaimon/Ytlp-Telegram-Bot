@@ -27,6 +27,11 @@ using TeleBot_csharp.BotUtils;
 var me = await bot.GetMeAsync();
 Console.WriteLine($"Bot Token Read\nInitiating @{me.Username}...");
 
+
+await bot.LogOutAsync();
+
+
+Console.WriteLine(bot.LocalBotServer);
 //My dependencies - Handling Commands with Modules (Separated)
 var commandHandler = new CommandHandler();
 commandHandler.Add(new StartComm());
